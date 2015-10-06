@@ -3,7 +3,7 @@
 -ifdef (TEST).
 -include_lib ("eunit/include/eunit.hrl").
 
-debug_test() ->
-  ok = ok.
+sum_test() ->
+  {ok, MR} = mr:start().
 
 -endif.

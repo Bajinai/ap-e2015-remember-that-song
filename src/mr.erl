@@ -11,7 +11,7 @@
 %% ---
 
 start() ->
-  ok.
+  {ok, spawn(mr, master, [])}.
 
 job(Pid, NumWork, MapFun, RedFun, Initial, Data) ->
   ok.
@@ -25,6 +25,11 @@ advanced_job(Pid, NumWork, MapFun, RedFun, Initial, Data) ->
 %% ---------
 %% Internals
 %% ---------
+
+master() ->
+  receive
+    Any -> master()
+  end.
 
 %% --------------
 %% End of Module.
