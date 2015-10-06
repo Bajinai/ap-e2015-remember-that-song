@@ -1,4 +1,5 @@
 -module (mr).
+-behaviour (gen_fsm).
 
 %% -------------------------------------
 %% mr: mr library's entry point.
@@ -11,13 +12,13 @@
 %% ---
 
 start() ->
-  {ok, spawn(mr, master, [])}.
+  ok.
 
 job(Pid, NumWork, MapFun, RedFun, Initial, Data) ->
   ok.
 
 stop(Pid) ->
-  ok.
+  gen_fsm:send_all_state_event(Pid, stop).
 
 advanced_job(Pid, NumWork, MapFun, RedFun, Initial, Data) ->
   ok.
@@ -25,11 +26,6 @@ advanced_job(Pid, NumWork, MapFun, RedFun, Initial, Data) ->
 %% ---------
 %% Internals
 %% ---------
-
-master() ->
-  receive
-    Any -> master()
-  end.
 
 %% --------------
 %% End of Module.
