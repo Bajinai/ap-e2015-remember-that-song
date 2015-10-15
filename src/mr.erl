@@ -12,13 +12,14 @@
 %% ---
 
 start() ->
-  gen_fsm:start(mr,arguments,).
+  gen_fsm:start(mr,arguments,[]).
 
 job(Pid, NumWork, MapFun, RedFun, Initial, Data) ->
   ok.
 
 stop(Pid) ->
-  gen_fsm:send_all_state_event(Pid, stop).
+  gen_fsm:stop(Pid,shutdown,infinity).
+%%  gen_fsm:send_all_state_event(Pid, stop).
 
 advanced_job(Pid, NumWork, MapFun, RedFun, Initial, Data) ->
   job(Pid, NumWork, MapFun, RedFun, Initial, Data).
