@@ -28,7 +28,7 @@ advanced_job(Pid, NumWork, MapFun, RedFun, Initial, Data) ->
 %% Internals
 %% ---------
 
-%%StateDate = [Caller,[Worker0,Worker1,...WorkerN-1],Result]
+
 %TODO termInit
 %TODO termMap
 %TODO termReduce
@@ -38,11 +38,7 @@ advanced_job(Pid, NumWork, MapFun, RedFun, Initial, Data) ->
 init(_) ->
   {ok,wait,[]}.
 
-
-terminate(A1,A2,A3) ->
-  ok.
-
-
+%State date = [9]
 %%State function0
 wait(Event, StateData) ->
   ok.
@@ -51,7 +47,7 @@ wait(Event, StateData) ->
 wait(Event, From, StateData) ->
   ok.
 
-
+% StateData = [caller,init,[workerid0,workerid1,...,workeridn-1],MapFun, RedFun]
 %%State function0
 init(Event, StateData) ->
   ok.
@@ -61,6 +57,7 @@ init(Event, From, StateData) ->
   ok.
 
 
+  % StateData = [caller,[workdat0,workdat1,...,workdatk-1],[workerid0,workerid1,...,workeridn-1],k,[mapres0,mapres1,...,mapresk-1]]
 %%State function0
 map(Event, StateData) ->
   ok.
@@ -70,6 +67,7 @@ map(Event, From, StateData) ->
   ok.
 
 
+% StateData = [caller,[workerid0,workerid1,...,workeridn-1],k,[mapres0,mapres1,...,mapresk-1]]
 %%State function0
 reduce(Event, StateData) ->
   ok.
@@ -77,7 +75,7 @@ reduce(Event, StateData) ->
 %State function1
 reduce(Event, From, StateData) ->
   ok.
-
+%StateData = [caller,[workerid0,workerid1,...,workeridn-1]]
 %%State function0
 result(Event, StateData) ->
   ok.
@@ -86,25 +84,22 @@ result(Event, StateData) ->
 result(Event, From, StateData) ->
   ok.
 
-handle_event(Event,StateName,StateData) ->
-  ok.
+handle_event(Event, StateName, StateData) ->
+  {next_state,StateName,StateData}.
 
-handle_sync_event(A1,A2,A3,A4) ->
-  ok.
+handle_sync_event(Event, From, StateName, StateData) ->
+  {reply,ok,StateName,StateData}.
 
-handle_info (A1,A2,A3) ->
-  ok.
+handle_info (Info, StateName, StateData) ->
+  {stop,normal,StateName}.
 
 terminate(Reason,StateName,StateData) ->
-  case StateName of
-    init   -> termInit  (Reason,StateData);
-    map    -> termMap   (Reason,StateData);
-    reduce -> termReduce(Reason,StateData);
-    result -> termResult(Reason,StateData)
-  end.
-
-code_change(A1,A2,A3,A4) ->
   ok.
+
+code_change(OldVsn, StateName, StateData, Extra) ->
+  case StateName of
+    _ -> {ok,StateName,StateData}
+  end.
 
 %% --------------
 %% End of Module.
