@@ -5,14 +5,15 @@
 %% mr: mr library's entry point.
 %% -------------------------------------
 
--compile (export_all).
+-compile ([start/0,job/6,stop/1,advanced_job/6]).
+-import(worker,([start/3,job/4,getRes/1]))
 
 %% ---
 %% API
 %% ---
 
 start() ->
-  gen_fsm:start(mr,arguments,[]).
+  gen_fsm:start(mr,[],[]).
 
 job(Pid, NumWork, MapFun, RedFun, Initial, Data) ->
   ok.
